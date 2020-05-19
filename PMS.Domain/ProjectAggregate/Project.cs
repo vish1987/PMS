@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PMS.Domain.ProjectAggregate
 {
-    class Project
+    public class Project
     {
         public string Id { get; set; }
         public string Code { get; set; }

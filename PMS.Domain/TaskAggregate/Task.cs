@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PMS.Domain.TaskAggregate
 {
-    class Task
+    public class Task
     {
         public string Id { get; set; }
         public string Name { get; set; }
