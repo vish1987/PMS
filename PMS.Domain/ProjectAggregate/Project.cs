@@ -1,23 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace PMS.API.Entities
+namespace PMS.Domain.ProjectAggregate
 {
-    public class Project
+    class Project
     {
+        public string Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime FinishDate { get; set; }
-        public enum State { get; set; }
-    }
-
-    public enum StateType
-    {
-        Planned,
-        InProgress,
-        Completed
+        public StateType State { get; set; }
     }
 }
