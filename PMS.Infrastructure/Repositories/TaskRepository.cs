@@ -1,5 +1,4 @@
 ﻿using PMS.Domain.TaskAggregate;
-using System;
 
 namespace PMS.Infrastructure.Repositories
 {
@@ -14,12 +13,12 @@ namespace PMS.Infrastructure.Repositories
 
         public Task Add(Task task)
         {
-            throw new NotImplementedException();
+            return _context.Tasks.Add(task).Entity;
         }
 
         public Task Update(Task task)
         {
-            throw new NotImplementedException();
+            return _context.Tasks.Update(task).Entity;
         }
     }
 }
