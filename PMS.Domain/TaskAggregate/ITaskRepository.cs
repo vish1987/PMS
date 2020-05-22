@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PMS.Domain.TaskAggregate
+﻿namespace PMS.Domain.TaskAggregate
 {
-    class ITaskRepository
+    public interface ITaskRepository
     {
+        Task Add(Task task);
+        Task Update(Task task);
     }
 }

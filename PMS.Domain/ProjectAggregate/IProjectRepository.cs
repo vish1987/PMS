@@ -4,7 +4,9 @@ using System.Text;
 
 namespace PMS.Domain.ProjectAggregate
 {
-    class IProjectRepository
+    public interface IProjectRepository
     {
+        Project Add(Project project);
+        Project Update(Project project);
     }
 }
