@@ -14,4 +14,9 @@
     <ProjectReference Include="..\PMS.Domain\PMS.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+
 </Project>

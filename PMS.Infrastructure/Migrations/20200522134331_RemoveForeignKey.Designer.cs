@@ -10,8 +10,8 @@ using PMS.Infrastructure;
 namespace PMS.Infrastructure.Migrations
 {
     [DbContext(typeof(PMSContext))]
-    [Migration("20200522124105_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20200522134331_RemoveForeignKey")]
+    partial class RemoveForeignKey
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,8 +23,10 @@ namespace PMS.Infrastructure.Migrations
 
             modelBuilder.Entity("PMS.Domain.ProjectAggregate.Project", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(max)");
@@ -48,8 +50,10 @@ namespace PMS.Infrastructure.Migrations
 
             modelBuilder.Entity("PMS.Domain.TaskAggregate.Task", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -60,6 +64,9 @@ namespace PMS.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -68,7 +75,18 @@ namespace PMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProjectId");
+
                     b.ToTable("Tasks");
+                });
+
+            modelBuilder.Entity("PMS.Domain.TaskAggregate.Task", b =>
+                {
+                    b.HasOne("PMS.Domain.ProjectAggregate.Project", "Project")
+                        .WithMany("Tasks")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

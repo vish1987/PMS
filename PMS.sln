@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMS.API", "PMS.API\PMS.API.csproj", "{B6CD52DD-4F7F-45F0-A9B1-8D435F8476A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMS.API", "PMS.API\PMS.API.csproj", "{B6CD52DD-4F7F-45F0-A9B1-8D435F8476A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMS.Domain", "PMS.Domain\PMS.Domain.csproj", "{896D8BC3-BBD5-4AE4-80EA-B6EAE51A3784}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMS.Domain", "PMS.Domain\PMS.Domain.csproj", "{896D8BC3-BBD5-4AE4-80EA-B6EAE51A3784}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMS.Infrastructure", "PMS.Infrastructure\PMS.Infrastructure.csproj", "{6BA39CFB-C18D-44DD-B9CD-6156E901F417}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMS.Infrastructure", "PMS.Infrastructure\PMS.Infrastructure.csproj", "{6BA39CFB-C18D-44DD-B9CD-6156E901F417}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

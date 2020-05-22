@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PMS.Infrastructure;
 
 namespace PMS.Infrastructure.Migrations
 {
     [DbContext(typeof(PMSContext))]
-    partial class PMSContextModelSnapshot : ModelSnapshot
+    [Migration("20200522133728_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -71,9 +73,14 @@ namespace PMS.Infrastructure.Migrations
                     b.Property<int>("State")
                         .HasColumnType("int");
 
+                    b.Property<int?>("Task")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
+
+                    b.HasIndex("Task");
 
                     b.ToTable("Tasks");
                 });
@@ -81,10 +88,14 @@ namespace PMS.Infrastructure.Migrations
             modelBuilder.Entity("PMS.Domain.TaskAggregate.Task", b =>
                 {
                     b.HasOne("PMS.Domain.ProjectAggregate.Project", "Project")
-                        .WithMany("Tasks")
+                        .WithMany()
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("PMS.Domain.ProjectAggregate.Project", null)
+                        .WithMany("Tasks")
+                        .HasForeignKey("Task");
                 });
 #pragma warning restore 612, 618
         }
