@@ -2,7 +2,8 @@
 {
     public interface ITaskRepository
     {
-        Task Add(Task task);
-        Task Update(Task task);
+        void Add(Task task);
+        void Update(Task task);
+        void AddSubTask(Task task);
     }
 }

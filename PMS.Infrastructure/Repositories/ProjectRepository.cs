@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PMS.Domain.ProjectAggregate;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +8,6 @@ namespace PMS.Infrastructure.Repositories
 {
     class ProjectRepository : IProjectRepository
     {
-
         private readonly PMSContext _context;
 
         public ProjectRepository(PMSContext context)
@@ -17,9 +15,17 @@ namespace PMS.Infrastructure.Repositories
             _context = context;
         }
 
-        public Project Add(Project project)
+        public void Add(Project project)
         {
-            return _context.Projects.Add(project).Entity;
+            _context.Projects.Add(project);
+            _context.SaveChanges();
+        }
+
+        public void AddSubProject(Project project)
+        {
+            var parentProject = _context.Projects.Include(x => x.SubProjects).Where(x => x.Id == project.ParentId).First();
+            parentProject.SubProjects.Add(project);
+            _context.SaveChanges();
         }
 
         public async Task<Project> FindByIdAsync(int id)
@@ -38,9 +44,10 @@ namespace PMS.Infrastructure.Repositories
             return projects;
         }
 
-        public Project Update(Project project)
+        public void Update(Project project)
         {
-            return _context.Projects.Update(project).Entity;
+            _context.Projects.Update(project);
+            _context.SaveChanges();
         }
     }
 }

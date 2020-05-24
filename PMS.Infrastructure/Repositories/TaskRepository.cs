@@ -1,4 +1,6 @@
 ﻿using PMS.Domain.TaskAggregate;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace PMS.Infrastructure.Repositories
 {
@@ -11,14 +13,23 @@ namespace PMS.Infrastructure.Repositories
             _context = context;
         }
 
-        public Task Add(Task task)
+        public void Add(Task task)
         {
-            return _context.Tasks.Add(task).Entity;
+            _context.Tasks.Add(task);
+            _context.SaveChanges();
         }
 
-        public Task Update(Task task)
+        public void AddSubTask(Task task)
         {
-            return _context.Tasks.Update(task).Entity;
+            var parentTask = _context.Tasks.Include(y => y.SubTasks).Where(x => x.Id == task.ParentId).First();
+            parentTask.SubTasks.Add(task);
+            _context.SaveChanges();
+        }
+
+        public void Update(Task task)
+        {
+            _context.Tasks.Update(task);
+            _context.SaveChanges();
         }
     }
 }

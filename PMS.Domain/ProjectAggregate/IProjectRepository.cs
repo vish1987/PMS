@@ -7,8 +7,8 @@ namespace PMS.Domain.ProjectAggregate
 {
     public interface IProjectRepository
     {
-        Project Add(Project project);
-        Project Update(Project project);
+        void Add(Project project);
+        void Update(Project project);
         Task<Project> FindByIdAsync(int id);
     }
 }
