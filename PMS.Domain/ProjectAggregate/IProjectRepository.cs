@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PMS.Domain.ProjectAggregate
 {
     public interface IProjectRepository
     {
-        void Add(Project project);
-        void Update(Project project);
+        Task Add(Project project);
+        Task Update(Project project);
+        Task Delete(int id);
         Task<Project> FindByIdAsync(int id);
+        Task<List<Project>> GetAll();
     }
 }

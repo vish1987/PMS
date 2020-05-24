@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PMS.Infrastructure.Repositories
 {
-    class ProjectRepository : IProjectRepository
+    public class ProjectRepository : IProjectRepository
     {
         private readonly PMSContext _context;
 
@@ -15,10 +15,10 @@ namespace PMS.Infrastructure.Repositories
             _context = context;
         }
 
-        public void Add(Project project)
+        public async Task Add(Project project)
         {
             _context.Projects.Add(project);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public void AddSubProject(Project project)
@@ -26,6 +26,17 @@ namespace PMS.Infrastructure.Repositories
             var parentProject = _context.Projects.Include(x => x.SubProjects).Where(x => x.Id == project.ParentId).First();
             parentProject.SubProjects.Add(project);
             _context.SaveChanges();
+        }
+
+        public async Task Delete(int id)
+        {
+            var project = new Project
+            {
+                Id = id
+            };
+
+            _context.Projects.Remove(project);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<Project> FindByIdAsync(int id)
@@ -39,15 +50,19 @@ namespace PMS.Infrastructure.Repositories
 
         public async Task<List<Project>> GetAll()
         {
-            var projects = await _context.Projects.Include(x => x.Tasks).ToListAsync();
+            var projects = await _context.Projects
+                               .Include(y => y.Tasks)
+                               .Where(t => t.Tasks.Any(s => s.State == Domain.StateType.InProgress))
+                               .ToListAsync();
+
 
             return projects;
         }
 
-        public void Update(Project project)
+        public async Task Update(Project project)
         {
             _context.Projects.Update(project);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

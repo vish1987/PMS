@@ -6,21 +6,19 @@ using System.Threading.Tasks;
 
 namespace PMS.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class PMSController : ControllerBase
+    public class ProjectController : ControllerBase
     {
         private readonly IProjectRepository _projectRepository;
-        private readonly ITaskRepository _taskRepository;
 
-        public PMSController(IProjectRepository projectRepository, ITaskRepository taskRepository)
+        public ProjectController(IProjectRepository projectRepository)
         {
             _projectRepository = projectRepository;
-            _taskRepository = taskRepository;
         }
 
+        [Route("project/add")]
         [HttpPost]
-        public IActionResult Add([FromBody]ProjectRequest projectRequest)
+        public async Task<IActionResult> Add([FromBody]ProjectRequest projectRequest)
         {
             var projectEntity = new Project()
             {
@@ -30,16 +28,20 @@ namespace PMS.API.Controllers
                 FinishDate = projectRequest.FinishDate
             };
 
-            _projectRepository.Add(projectEntity);
+            await _projectRepository.Add(projectEntity);
 
             return Ok();
 
         }
 
+        [Route("project/update")]
         [HttpPost]
         public async Task<IActionResult> Update([FromBody]ProjectRequest projectRequest)
         {
-            var projectEntity = await _projectRepository.FindByIdAsync(projectRequest.Id);
+            if (!projectRequest.ProjectId.HasValue)
+                return BadRequest("Plase provide project id to update valid record");
+
+            var projectEntity = await _projectRepository.FindByIdAsync(projectRequest.ProjectId.Value);
 
             projectEntity.Code = projectRequest.Code;
             projectEntity.Name = projectRequest.Name;
@@ -47,10 +49,19 @@ namespace PMS.API.Controllers
             projectEntity.FinishDate = projectRequest.FinishDate;
 
 
-            _projectRepository.Update(projectEntity);
+            await _projectRepository.Update(projectEntity);
 
             return Ok();
-
         }
+
+        [Route("project/delete/{id}")]
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _projectRepository.Delete(id);
+
+            return Ok();
+        }
+
     }
 }
