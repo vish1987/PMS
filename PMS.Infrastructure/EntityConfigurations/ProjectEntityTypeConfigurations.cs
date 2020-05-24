@@ -4,12 +4,16 @@ using PMS.Domain.ProjectAggregate;
 
 namespace PMS.Infrastructure.EntityConfigurations
 {
-    class ProjectEntityTypeConfigurations : IEntityTypeConfiguration<Project>
+    public class ProjectEntityTypeConfigurations : IEntityTypeConfiguration<Project>
     {
         public void Configure(EntityTypeBuilder<Project> builder)
         {
-            builder.ToTable("projects", "PMS");
+            builder.ToTable("projects", PMSContext.DEFAULT_SCHEMA);
             builder.HasKey(b => b.Id);
+
+            builder.HasMany(p => p.SubProjects)
+                .WithOne(p => p.ParentProject)
+                .HasForeignKey(x => x.ParentId);
         }
     }
 }

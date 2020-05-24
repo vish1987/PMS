@@ -35,15 +35,17 @@ namespace PMS.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("State")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.ToTable("Projects");
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("projects","PMS");
                 });
 
             modelBuilder.Entity("PMS.Domain.TaskAggregate.Task", b =>
@@ -62,6 +64,9 @@ namespace PMS.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
@@ -73,13 +78,26 @@ namespace PMS.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ParentId");
+
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("tasks","PMS");
+                });
+
+            modelBuilder.Entity("PMS.Domain.ProjectAggregate.Project", b =>
+                {
+                    b.HasOne("PMS.Domain.ProjectAggregate.Project", "ParentProject")
+                        .WithMany("SubProjects")
+                        .HasForeignKey("ParentId");
                 });
 
             modelBuilder.Entity("PMS.Domain.TaskAggregate.Task", b =>
                 {
+                    b.HasOne("PMS.Domain.TaskAggregate.Task", "ParentTask")
+                        .WithMany("SubTasks")
+                        .HasForeignKey("ParentId");
+
                     b.HasOne("PMS.Domain.ProjectAggregate.Project", "Project")
                         .WithMany("Tasks")
                         .HasForeignKey("ProjectId")

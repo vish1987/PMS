@@ -2,6 +2,7 @@
 using PMS.API.Models;
 using PMS.Domain.ProjectAggregate;
 using PMS.Domain.TaskAggregate;
+using System.Threading.Tasks;
 
 namespace PMS.API.Controllers
 {
@@ -19,7 +20,7 @@ namespace PMS.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddProjects([FromBody]ProjectRequest projectRequest)
+        public IActionResult Add([FromBody]ProjectRequest projectRequest)
         {
             var projectEntity = new Project()
             {
@@ -30,6 +31,23 @@ namespace PMS.API.Controllers
             };
 
             _projectRepository.Add(projectEntity);
+
+            return Ok();
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update([FromBody]ProjectRequest projectRequest)
+        {
+            var projectEntity = await _projectRepository.FindByIdAsync(projectRequest.Id);
+
+            projectEntity.Code = projectRequest.Code;
+            projectEntity.Name = projectRequest.Name;
+            projectEntity.StartDate = projectRequest.StartDate;
+            projectEntity.FinishDate = projectRequest.FinishDate;
+
+
+            _projectRepository.Update(projectEntity);
 
             return Ok();
 
