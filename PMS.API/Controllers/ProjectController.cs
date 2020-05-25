@@ -25,10 +25,14 @@ namespace PMS.API.Controllers
                 Code = projectRequest.Code,
                 Name = projectRequest.Name,
                 StartDate = projectRequest.StartDate,
-                FinishDate = projectRequest.FinishDate
+                FinishDate = projectRequest.FinishDate,
+                ParentId = projectRequest.ParentId
             };
 
-            await _projectRepository.Add(projectEntity);
+            if (projectRequest.ParentId == -1)
+                await _projectRepository.Add(projectEntity);
+
+            await _projectRepository.AddSubProject(projectEntity);
 
             return Ok();
 
@@ -62,6 +66,5 @@ namespace PMS.API.Controllers
 
             return Ok();
         }
-
     }
 }

@@ -1,6 +1,7 @@
 ﻿using PMS.Domain.TaskAggregate;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PMS.Domain.ProjectAggregate
 {
@@ -11,6 +12,7 @@ namespace PMS.Domain.ProjectAggregate
         public string Name { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime FinishDate { get; set; }
+        [NotMapped]
         public StateType StateType { get; set; }
 
         public int? ParentId { get; set; }

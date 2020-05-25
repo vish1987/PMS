@@ -21,11 +21,11 @@ namespace PMS.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public void AddSubProject(Project project)
+        public async Task AddSubProject(Project project)
         {
             var parentProject = _context.Projects.Include(x => x.SubProjects).Where(x => x.Id == project.ParentId).First();
             parentProject.SubProjects.Add(project);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public async Task Delete(int id)

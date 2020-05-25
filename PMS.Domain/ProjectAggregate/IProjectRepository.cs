@@ -6,6 +6,7 @@ namespace PMS.Domain.ProjectAggregate
     public interface IProjectRepository
     {
         Task Add(Project project);
+        Task AddSubProject(Project project);
         Task Update(Project project);
         Task Delete(int id);
         Task<Project> FindByIdAsync(int id);

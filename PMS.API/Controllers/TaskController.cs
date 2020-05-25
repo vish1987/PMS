@@ -18,7 +18,7 @@ namespace PMS.API.Controllers
 
         [Route("task/add")]
         [HttpPost]
-        public IActionResult Add([FromBody]TaskRequest taskRequest)
+        public async Task<IActionResult> Add([FromBody]TaskRequest taskRequest)
         {
             var taskEntity = new Task()
             {
@@ -30,10 +30,12 @@ namespace PMS.API.Controllers
                 State = taskRequest.State
             };
 
-            _taskRepository.Add(taskEntity);
+            if (taskRequest.ParentId == -1)
+                await _taskRepository.Add(taskEntity);
+
+            await _taskRepository.AddSubTask(taskEntity);
 
             return Ok();
-
         }
 
         [Route("task/update")]
@@ -41,7 +43,7 @@ namespace PMS.API.Controllers
         public async Task<IActionResult> Update([FromBody]TaskRequest taskRequest)
         {
             if (!taskRequest.TaskId.HasValue)
-                return BadRequest("Plase provide project id to update valid record");
+                return BadRequest("Please provide task id to update valid record");
 
             var taskEntity = await _taskRepository.FindByIdAsync(taskRequest.TaskId.Value);
 
@@ -53,7 +55,7 @@ namespace PMS.API.Controllers
             taskRequest.ProjectId = taskRequest.ProjectId;
 
 
-            _taskRepository.Update(taskEntity);
+            await _taskRepository.Update(taskEntity);
 
             return Ok();
         }
