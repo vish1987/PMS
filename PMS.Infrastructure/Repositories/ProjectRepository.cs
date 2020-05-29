@@ -50,9 +50,9 @@ namespace PMS.Infrastructure.Repositories
 
         public async Task<List<Project>> GetAll()
         {
-            var projects = await _context.Projects
+            var projects = await _context.Projects.Include(x=>x.SubProjects)
                                .Include(y => y.Tasks)
-                               .Where(t => t.Tasks.Any(s => s.State == Domain.StateType.InProgress))
+                               .Where(t => t.Tasks.Any(s => s.State == Domain.StateType.Planned))
                                .ToListAsync();
 
 

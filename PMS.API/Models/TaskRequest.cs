@@ -19,7 +19,7 @@ namespace PMS.API.Models
         public string Description { get; set; }
         [Required]
         public DateTime StartDate { get; set; }
-        [Required]
+        [Required] 
         public DateTime FinishDate { get; set; }
         [Required]
         public StateType State { get; set; }

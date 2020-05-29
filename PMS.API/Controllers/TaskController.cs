@@ -16,7 +16,7 @@ namespace PMS.API.Controllers
             _taskRepository = taskRepository;
         }
 
-        [Route("task/add")]
+        [Route("tasks/add")]
         [HttpPost]
         public async Task<IActionResult> Add([FromBody]TaskRequest taskRequest)
         {
@@ -32,13 +32,15 @@ namespace PMS.API.Controllers
 
             if (taskRequest.ParentId == -1)
                 await _taskRepository.Add(taskEntity);
-
-            await _taskRepository.AddSubTask(taskEntity);
-
+            else
+            {
+                taskEntity.ParentId = taskRequest.ParentId;
+                await _taskRepository.AddSubTask(taskEntity);
+            }
             return Ok();
         }
 
-        [Route("task/update")]
+        [Route("tasks/update")]
         [HttpPost]
         public async Task<IActionResult> Update([FromBody]TaskRequest taskRequest)
         {
@@ -60,7 +62,7 @@ namespace PMS.API.Controllers
             return Ok();
         }
 
-        [Route("task/delete/{id}")]
+        [Route("tasks/delete/{id}")]
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
