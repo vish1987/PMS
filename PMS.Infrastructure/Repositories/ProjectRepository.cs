@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PMS.Domain.ProjectAggregate;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -48,11 +49,11 @@ namespace PMS.Infrastructure.Repositories
             return project;
         }
 
-        public async Task<List<Project>> GetAll()
+        public async Task<List<Project>> FindByDatesAndTaskStatus(DateTime fromDate, DateTime toDate, Domain.StateType stateType)
         {
-            var projects = await _context.Projects.Include(x=>x.SubProjects)
+            var projects = await _context.Projects
                                .Include(y => y.Tasks)
-                               .Where(t => t.Tasks.Any(s => s.State == Domain.StateType.Planned))
+                               .Where(t => t.Tasks.Any(s => s.State == stateType) && t.StartDate >= fromDate && t.StartDate <= toDate)
                                .ToListAsync();
 
 
