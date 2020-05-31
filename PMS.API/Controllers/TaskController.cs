@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PMS.API.Models;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using PMS.API.Models.Task;
 using PMS.Domain.TaskAggregate;
 using System.Threading.Tasks;
 using Task = PMS.Domain.TaskAggregate.Task;
@@ -10,52 +11,43 @@ namespace PMS.API.Controllers
     public class TaskController : ControllerBase
     {
         ITaskRepository _taskRepository;
+        private readonly IMapper _mapper;
 
-        public TaskController(ITaskRepository taskRepository)
+        public TaskController(ITaskRepository taskRepository, IMapper mapper)
         {
             _taskRepository = taskRepository;
+            _mapper = mapper;
         }
 
         [Route("tasks/add")]
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody]TaskRequest taskRequest)
+        public async Task<IActionResult> Add([FromBody]AddTaskRequest addTaskRequest)
         {
-            var taskEntity = new Task()
-            {
-                Name = taskRequest.Name,
-                StartDate = taskRequest.StartDate,
-                FinishDate = taskRequest.FinishDate,
-                Description = taskRequest.Description,
-                ProjectId = taskRequest.ProjectId,
-                State = taskRequest.State
-            };
+            var taskEntity = _mapper.Map<Task>(addTaskRequest);
 
-            if (taskRequest.ParentId == -1)
-                await _taskRepository.Add(taskEntity);
-            else
-            {
-                taskEntity.ParentId = taskRequest.ParentId;
-                await _taskRepository.AddSubTask(taskEntity);
-            }
+            await _taskRepository.AddSubTask(taskEntity);
+
+            return Ok();
+        }
+
+        [Route("tasks/addsubtask")]
+        [HttpPost]
+        public async Task<IActionResult> AddSubTask([FromBody]AddSubTaskRequest addSubTaskRequest)
+        {
+            var taskEntity = _mapper.Map<Task>(addSubTaskRequest);
+
+            await _taskRepository.AddSubTask(taskEntity);
+
             return Ok();
         }
 
         [Route("tasks/update")]
         [HttpPost]
-        public async Task<IActionResult> Update([FromBody]TaskRequest taskRequest)
+        public async Task<IActionResult> Update([FromBody]UpdateTaskRequest updateTaskRequest)
         {
-            if (!taskRequest.TaskId.HasValue)
-                return BadRequest("Please provide task id to update valid record");
+            Task taskEntity = await _taskRepository.FindByIdAsync(updateTaskRequest.TaskId);
 
-            var taskEntity = await _taskRepository.FindByIdAsync(taskRequest.TaskId.Value);
-
-            taskEntity.Name = taskRequest.Name;
-            taskEntity.Description = taskRequest.Description;
-            taskEntity.StartDate = taskRequest.StartDate;
-            taskEntity.FinishDate = taskRequest.FinishDate;
-            taskEntity.State = taskRequest.State;
-            taskRequest.ProjectId = taskRequest.ProjectId;
-
+            taskEntity = _mapper.Map<Task>(updateTaskRequest);
 
             await _taskRepository.Update(taskEntity);
 

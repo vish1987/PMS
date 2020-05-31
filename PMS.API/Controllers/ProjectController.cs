@@ -1,6 +1,7 @@
-﻿using ClosedXML.Excel;
+﻿using AutoMapper;
+using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
-using PMS.API.Models;
+using PMS.API.Models.Project;
 using PMS.Domain.ProjectAggregate;
 using PMS.Domain.TaskAggregate;
 using System;
@@ -16,36 +17,38 @@ namespace PMS.API.Controllers
     {
         private readonly IProjectRepository _projectRepository;
         private readonly ITaskRepository _taskRepository;
+        private readonly IMapper _mapper;
 
-        public ProjectController(IProjectRepository projectRepository, ITaskRepository taskRepository)
+        public ProjectController(IProjectRepository projectRepository, ITaskRepository taskRepository, IMapper mapper)
         {
             _projectRepository = projectRepository;
             _taskRepository = taskRepository;
+            _mapper = mapper;
         }
 
         [Route("projects/add")]
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody]ProjectRequest projectRequest)
+        public async Task<IActionResult> Add([FromBody]AddProejctRequest addRequest)
         {
-            var projectEntity = new Project()
-            {
-                Code = projectRequest.Code,
-                Name = projectRequest.Name,
-                StartDate = projectRequest.StartDate,
-                FinishDate = projectRequest.FinishDate
-            };
+            var projectEntity = _mapper.Map<Project>(addRequest);
 
-            if (projectRequest.ParentId == -1)
-                await _projectRepository.Add(projectEntity);
-            else
-            {
-                projectEntity.ParentId = projectRequest.ParentId;
-                await _projectRepository.AddSubProject(projectEntity);
-            }
+            await _projectRepository.Add(projectEntity);
+
             return Ok();
         }
 
-        [Route("projects/GetAll")]
+        [Route("projects/addsubproject")]
+        [HttpPost]
+        public async Task<IActionResult> AddSubProject([FromBody]AddSubProjectRequest addSubProjectRequest)
+        {
+            var projectEntity = _mapper.Map<Project>(addSubProjectRequest);
+
+            await _projectRepository.AddSubProject(projectEntity);
+
+            return Ok();
+        }
+
+        [Route("projects/getall")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -70,18 +73,11 @@ namespace PMS.API.Controllers
 
         [Route("projects/update")]
         [HttpPost]
-        public async Task<IActionResult> Update([FromBody]ProjectRequest projectRequest)
+        public async Task<IActionResult> Update([FromBody]UpdateProjectRequest updateProjectRequest)
         {
-            if (!projectRequest.ProjectId.HasValue)
-                return BadRequest("Plase provide project id to update valid record");
+            var projectEntity = await _projectRepository.FindByIdAsync(updateProjectRequest.ProjectId);
 
-            var projectEntity = await _projectRepository.FindByIdAsync(projectRequest.ProjectId.Value);
-
-            projectEntity.Code = projectRequest.Code;
-            projectEntity.Name = projectRequest.Name;
-            projectEntity.StartDate = projectRequest.StartDate;
-            projectEntity.FinishDate = projectRequest.FinishDate;
-
+            projectEntity = _mapper.Map<Project>(updateProjectRequest);
 
             await _projectRepository.Update(projectEntity);
 

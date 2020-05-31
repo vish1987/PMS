@@ -17,7 +17,8 @@ namespace PMS.Infrastructure.EntityConfigurations
 
             builder.HasMany(p => p.SubTasks)
                 .WithOne(p => p.ParentTask)
-                .HasForeignKey(h => h.ParentId);
+                .HasForeignKey(h => h.ParentId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
