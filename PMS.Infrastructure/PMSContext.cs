@@ -9,7 +9,7 @@ namespace PMS.Infrastructure
     {
         public PMSContext(DbContextOptions<PMSContext> options) : base(options)
         {
-
+           
         }
 
         public const string DEFAULT_SCHEMA = "PMS";

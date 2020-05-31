@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PMS.Domain.TaskAggregate
 {
@@ -9,5 +10,6 @@ namespace PMS.Domain.TaskAggregate
         System.Threading.Tasks.Task Delete(int id);
         System.Threading.Tasks.Task AddSubTask(Task task);
         Task<Task> FindByIdAsync(int id);
+        Task<List<Task>> FindByProjectIdsAsync(IList<int> projectIds);
     }
 }

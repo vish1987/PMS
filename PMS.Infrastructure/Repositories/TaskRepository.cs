@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using Task = PMS.Domain.TaskAggregate.Task;
+using System.Collections.Generic;
 
 namespace PMS.Infrastructure.Repositories
 {
@@ -52,6 +53,11 @@ namespace PMS.Infrastructure.Repositories
 
             _context.Tasks.Remove(task);
             _context.SaveChanges();
+        }
+
+        public async Task<List<Task>> FindByProjectIdsAsync(IList<int> projectIds)
+        {
+            return await _context.Tasks.Where(x => projectIds.Contains(x.ProjectId)).ToListAsync();
         }
     }
 }

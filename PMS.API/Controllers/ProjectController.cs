@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using PMS.API.Models;
 using PMS.Domain.ProjectAggregate;
+using PMS.Domain.TaskAggregate;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PMS.API.Controllers
@@ -13,10 +15,12 @@ namespace PMS.API.Controllers
     public class ProjectController : ControllerBase
     {
         private readonly IProjectRepository _projectRepository;
+        private readonly ITaskRepository _taskRepository;
 
-        public ProjectController(IProjectRepository projectRepository)
+        public ProjectController(IProjectRepository projectRepository, ITaskRepository taskRepository)
         {
             _projectRepository = projectRepository;
+            _taskRepository = taskRepository;
         }
 
         [Route("projects/add")]
@@ -39,7 +43,29 @@ namespace PMS.API.Controllers
                 await _projectRepository.AddSubProject(projectEntity);
             }
             return Ok();
+        }
 
+        [Route("projects/GetAll")]
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var projects = await _projectRepository.GetAll();
+
+            foreach (var project in projects)
+            {
+                var projectsIds = new List<int> { project.Id };
+                var subprojectIds = project.SubProjects?.Select(x => x.Id).ToList();
+
+                if (subprojectIds != null)
+                    projectsIds.AddRange(subprojectIds);
+
+                var tasks = await _taskRepository.FindByProjectIdsAsync(projectsIds);
+
+                project.StateType = project.CalcualteState(tasks);
+            }
+
+
+            return Ok(projects);
         }
 
         [Route("projects/update")]

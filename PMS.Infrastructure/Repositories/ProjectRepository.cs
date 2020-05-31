@@ -22,9 +22,14 @@ namespace PMS.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<Project>> GetAll()
+        {
+            return await _context.Projects.Include(proj => proj.SubProjects).ToListAsync();
+        }
+
         public async Task AddSubProject(Project project)
         {
-            var parentProject = _context.Projects.Include(x => x.SubProjects).Where(x => x.Id == project.ParentId).First();
+            var parentProject = _context.Projects.Include(proj => proj.SubProjects).Where(proj => proj.Id == project.ParentId).First();
             parentProject.SubProjects.Add(project);
             await _context.SaveChangesAsync();
         }
