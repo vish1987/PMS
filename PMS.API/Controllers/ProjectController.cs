@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using PMS.API.Models.Project;
 using PMS.Domain.ProjectAggregate;
 using PMS.Domain.TaskAggregate;
+using Swashbuckle.Swagger.Annotations;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace PMS.API.Controllers
@@ -56,6 +58,7 @@ namespace PMS.API.Controllers
 
         [Route("projects/getall")]
         [HttpGet]
+        [SwaggerResponse(HttpStatusCode.OK, Type = typeof(IList<GetAllProjectResponse>))]
         public async Task<IActionResult> GetAll()
         {
             var projects = await _projectRepository.GetAll();
@@ -99,7 +102,10 @@ namespace PMS.API.Controllers
 
             var projectEntity = await _projectRepository.FindByIdAsync(updateProjectRequest.ProjectId.Value);
 
-            projectEntity = _mapper.Map<Project>(updateProjectRequest);
+            projectEntity.Code = updateProjectRequest.Code;
+            projectEntity.Name = updateProjectRequest.Name;
+            projectEntity.StartDate = updateProjectRequest.StartDate.Value;
+            projectEntity.FinishDate = updateProjectRequest.FinishDate.Value;
 
             await _projectRepository.Update(projectEntity);
 

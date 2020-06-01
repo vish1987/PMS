@@ -13,12 +13,13 @@ namespace PMS.Infrastructure.EntityConfigurations
 
             builder.HasOne(x => x.Project)
                 .WithMany(w => w.Tasks)
-                .HasForeignKey(h => h.ProjectId);
+                .HasForeignKey(h => h.ProjectId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(p => p.SubTasks)
                 .WithOne(p => p.ParentTask)
-                .HasForeignKey(h => h.ParentId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(h => h.ParentId);
+                
         }
     }
 }

@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using PMS.API.Models.Task;
 using PMS.Domain.TaskAggregate;
+using Swashbuckle.Swagger.Annotations;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Task = PMS.Domain.TaskAggregate.Task;
 
@@ -29,7 +31,7 @@ namespace PMS.API.Controllers
 
             var taskEntity = _mapper.Map<Task>(addTaskRequest);
 
-            await _taskRepository.AddSubTask(taskEntity);
+            await _taskRepository.Add(taskEntity);
 
             return Ok();
         }
@@ -57,7 +59,11 @@ namespace PMS.API.Controllers
 
             Task taskEntity = await _taskRepository.FindByIdAsync(updateTaskRequest.TaskId.Value);
 
-            taskEntity = _mapper.Map<Task>(updateTaskRequest);
+            taskEntity.Name = updateTaskRequest.Name;
+            taskEntity.Description = updateTaskRequest.Description;
+            taskEntity.StartDate = updateTaskRequest.StartDate.Value;
+            taskEntity.FinishDate = updateTaskRequest.FinishDate.Value;
+            taskEntity.State = updateTaskRequest.State.Value;
 
             await _taskRepository.Update(taskEntity);
 
@@ -75,6 +81,7 @@ namespace PMS.API.Controllers
 
         [Route("tasks/getall")]
         [HttpGet]
+        [SwaggerResponse(HttpStatusCode.OK, Type = typeof(IList<GetAllTaskResponse>))]
         public async Task<IActionResult> GetAll()
         {
             var tasks = await _taskRepository.GetAll();

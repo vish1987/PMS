@@ -10,7 +10,7 @@ using PMS.Infrastructure;
 namespace PMS.Infrastructure.Migrations
 {
     [DbContext(typeof(PMSContext))]
-    [Migration("20200524122927_InitialCreate")]
+    [Migration("20200601220723_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
