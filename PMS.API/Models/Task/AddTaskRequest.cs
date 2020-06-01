@@ -1,4 +1,6 @@
-﻿using PMS.Domain;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using PMS.Domain;
 using System;
 using System.ComponentModel.DataAnnotations;
 

@@ -10,6 +10,7 @@ using PMS.Domain.ProjectAggregate;
 using PMS.Domain.TaskAggregate;
 using PMS.Infrastructure;
 using PMS.Infrastructure.Repositories;
+using System.Text.Json.Serialization;
 
 namespace PMS.API
 {
@@ -25,7 +26,15 @@ namespace PMS.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                 .AddJsonOptions(opts =>
+                 {
+                     opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                 })
+                .AddNewtonsoftJson(options =>
+                 {
+                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                 });
 
             services.AddTransient<ITaskRepository, TaskRepository>();
             services.AddTransient<IProjectRepository, ProjectRepository>();
@@ -41,10 +50,7 @@ namespace PMS.API
                 c.SwaggerDoc("pms", new OpenApiInfo { Title = "Project Management System", Version = "v1" });
             });
 
-            services.AddControllersWithViews()
-                    .AddNewtonsoftJson(options =>
-                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                    );
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

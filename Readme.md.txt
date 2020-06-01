@@ -1,8 +1,14 @@
-//create Mirgrations
-dotnet ef migrations add SelfReferencingSchema --project PMS.Infrastructure --startup-project PMS.API
+To create database follow below steps
 
-//apply Migrations
-dotnet-ef database update --project PMS.Infrastructure --startup-project PMS.API
+1. Go to file PMSContextFactory.cs and change db connectionstring
+2. Open package manager console and execute command dotnet-ef database update --project PMS.Infrastructure --startup-project PMS.API to create database
 
-//remove Migrations
-dotnet ef migrations remove --project PMS.Infrastructure --startup-project PMS.API
+
+
+
+
+
+
+
+
+
