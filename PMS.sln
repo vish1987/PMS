@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMS.Domain", "PMS.Domain\PM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMS.Infrastructure", "PMS.Infrastructure\PMS.Infrastructure.csproj", "{6BA39CFB-C18D-44DD-B9CD-6156E901F417}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMS.UnitTests", "PMS.UnitTests\PMS.UnitTests.csproj", "{65C0F972-9349-48C6-A0ED-975F217B39D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMS.UnitTests", "PMS.UnitTests\PMS.UnitTests.csproj", "{9CF62E36-4850-422A-A0E7-C00AB621D885}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{6BA39CFB-C18D-44DD-B9CD-6156E901F417}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BA39CFB-C18D-44DD-B9CD-6156E901F417}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BA39CFB-C18D-44DD-B9CD-6156E901F417}.Release|Any CPU.Build.0 = Release|Any CPU
-		{65C0F972-9349-48C6-A0ED-975F217B39D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{65C0F972-9349-48C6-A0ED-975F217B39D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{65C0F972-9349-48C6-A0ED-975F217B39D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{65C0F972-9349-48C6-A0ED-975F217B39D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CF62E36-4850-422A-A0E7-C00AB621D885}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CF62E36-4850-422A-A0E7-C00AB621D885}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CF62E36-4850-422A-A0E7-C00AB621D885}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CF62E36-4850-422A-A0E7-C00AB621D885}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

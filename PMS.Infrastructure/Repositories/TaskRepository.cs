@@ -52,7 +52,7 @@ namespace PMS.Infrastructure.Repositories
             };
 
             _context.Tasks.Remove(task);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<List<Task>> FindByProjectIdsAsync(IList<int> projectIds)
