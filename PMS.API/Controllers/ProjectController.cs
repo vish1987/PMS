@@ -75,7 +75,6 @@ namespace PMS.API.Controllers
                 overallResponse.Add(projectResponse);
             }
 
-
             return Ok(overallResponse);
         }
 
