@@ -1,17 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using PMS.Domain.ProjectAggregate;
 using PMS.Domain.TaskAggregate;
 using PMS.Infrastructure;
@@ -41,6 +35,12 @@ namespace PMS.API
 
             services.AddAutoMapper(typeof(Startup));
 
+            //added swagger for API documentation
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("pms", new OpenApiInfo { Title = "Project Management System", Version="v1"});
+            });
+
             services.AddControllersWithViews()
                     .AddNewtonsoftJson(options =>
                      options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
@@ -55,6 +55,16 @@ namespace PMS.API
                 app.UseDeveloperExceptionPage();
             }
 
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/pms/swagger.json", "pms");
+            });
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -65,6 +75,8 @@ namespace PMS.API
             {
                 endpoints.MapControllers();
             });
+
+            
 
         }
     }
