@@ -8,44 +8,22 @@ namespace PMS.UnitTests.Domain
 {
     public class ProjectAggregateTests
     {
-
-
-        [Fact]
-        public void CalculateStatus_should_return_status_InProgress()
+        [Theory]
+        [InlineData(StateType.Completed, StateType.Completed, StateType.Completed, StateType.Completed)]
+        [InlineData(StateType.Planned, StateType.InProgress, StateType.Completed, StateType.InProgress)]
+        [InlineData(StateType.Planned, StateType.Planned, StateType.Planned, StateType.Planned)]
+        public void CalculateState_should_return_correct_state(StateType task1Sate, StateType task2Sate, StateType task3Sate, StateType expectedState)
         {
-            List<Task> tasks = CreateTasks(StateType.InProgress, StateType.Completed, StateType.Planned);
+            List<Task> tasks = CreateTasks(task1Sate, task2Sate, task3Sate);
 
             var project = new Project();
 
             var state = project.CalcualteState(tasks);
 
-            Assert.Equal(StateType.InProgress, state);
+            Assert.Equal(expectedState, state);
         }
 
-        [Fact]
-        public void CalculateStatus_should_return_status_Completed()
-        {
-            List<Task> tasks = CreateTasks(StateType.Completed, StateType.Completed, StateType.Completed);
-
-            var project = new Project();
-
-            var state = project.CalcualteState(tasks);
-
-            Assert.Equal(StateType.Completed, state);
-        }
-
-        [Fact]
-        public void CalculateStatus_should_return_status_Planned()
-        {
-            List<Task> tasks = CreateTasks(StateType.Planned, StateType.Planned, StateType.Planned);
-
-            var project = new Project();
-
-            var state = project.CalcualteState(tasks);
-
-            Assert.Equal(StateType.Planned, state);
-        }
-
+       
         private static List<Task> CreateTasks(StateType task1Sate, StateType task2Sate, StateType task3Sate)
         {
             var tasks = new List<Task>();
