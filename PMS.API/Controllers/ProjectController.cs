@@ -30,6 +30,9 @@ namespace PMS.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromBody]AddProjectRequest addRequest)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var projectEntity = _mapper.Map<Project>(addRequest);
 
             await _projectRepository.Add(projectEntity);
@@ -41,6 +44,9 @@ namespace PMS.API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddSubProject([FromBody]AddSubProjectRequest addSubProjectRequest)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var projectEntity = _mapper.Map<Project>(addSubProjectRequest);
 
             await _projectRepository.AddSubProject(projectEntity);
@@ -89,7 +95,10 @@ namespace PMS.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Update([FromBody]UpdateProjectRequest updateProjectRequest)
         {
-            var projectEntity = await _projectRepository.FindByIdAsync(updateProjectRequest.ProjectId);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var projectEntity = await _projectRepository.FindByIdAsync(updateProjectRequest.ProjectId.Value);
 
             projectEntity = _mapper.Map<Project>(updateProjectRequest);
 

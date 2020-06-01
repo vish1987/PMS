@@ -7,15 +7,15 @@ namespace PMS.API.Models.Task
     public class AddTaskRequest
     {
         [Required]
-        public int ProjectId { get; set; }
+        public int? ProjectId { get; set; }
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
         [Required]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
         [Required]
-        public DateTime FinishDate { get; set; }
+        public DateTime? FinishDate { get; set; }
         [Required]
-        public StateType State { get; set; }
+        public StateType? State { get; set; }
     }
 }

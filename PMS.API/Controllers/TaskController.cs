@@ -24,6 +24,9 @@ namespace PMS.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromBody]AddTaskRequest addTaskRequest)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var taskEntity = _mapper.Map<Task>(addTaskRequest);
 
             await _taskRepository.AddSubTask(taskEntity);
@@ -35,6 +38,9 @@ namespace PMS.API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddSubTask([FromBody]AddSubTaskRequest addSubTaskRequest)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var taskEntity = _mapper.Map<Task>(addSubTaskRequest);
 
             await _taskRepository.AddSubTask(taskEntity);
@@ -46,7 +52,10 @@ namespace PMS.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Update([FromBody]UpdateTaskRequest updateTaskRequest)
         {
-            Task taskEntity = await _taskRepository.FindByIdAsync(updateTaskRequest.TaskId);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            Task taskEntity = await _taskRepository.FindByIdAsync(updateTaskRequest.TaskId.Value);
 
             taskEntity = _mapper.Map<Task>(updateTaskRequest);
 
