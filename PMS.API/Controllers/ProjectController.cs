@@ -28,7 +28,7 @@ namespace PMS.API.Controllers
 
         [Route("projects/add")]
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody]AddProejctRequest addRequest)
+        public async Task<IActionResult> Add([FromBody]AddProjectRequest addRequest)
         {
             var projectEntity = _mapper.Map<Project>(addRequest);
 
@@ -54,21 +54,35 @@ namespace PMS.API.Controllers
         {
             var projects = await _projectRepository.GetAll();
 
+            var overallResponse = new List<GetAllProjectResponse>();
+
             foreach (var project in projects)
             {
-                var projectsIds = new List<int> { project.Id };
-                var subprojectIds = project.SubProjects?.Select(x => x.Id).ToList();
+                var projectResponse = _mapper.Map<GetAllProjectResponse>(project);
 
-                if (subprojectIds != null)
-                    projectsIds.AddRange(subprojectIds);
+                List<int> projectsIds = GetProjectIds(project);
 
                 var tasks = await _taskRepository.FindByProjectIdsAsync(projectsIds);
 
-                project.StateType = project.CalcualteState(tasks);
+                projectResponse.State = project.CalcualteState(tasks).ToString();
+
+                overallResponse.Add(projectResponse);
             }
 
 
-            return Ok(projects);
+            return Ok(overallResponse);
+        }
+
+        private static List<int> GetProjectIds(Project project)
+        {
+            var projectsIds = new List<int> { project.Id };
+
+            var subprojectIds = project.SubProjects?.Select(x => x.Id).ToList();
+
+            if (subprojectIds != null)
+                projectsIds.AddRange(subprojectIds);
+
+            return projectsIds;
         }
 
         [Route("projects/update")]

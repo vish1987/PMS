@@ -11,5 +11,6 @@ namespace PMS.Domain.TaskAggregate
         System.Threading.Tasks.Task AddSubTask(Task task);
         Task<Task> FindByIdAsync(int id);
         Task<List<Task>> FindByProjectIdsAsync(IList<int> projectIds);
+        Task<List<Task>> GetAll();
     }
 }

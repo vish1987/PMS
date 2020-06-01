@@ -24,7 +24,7 @@ namespace PMS.Infrastructure.Repositories
 
         public async Task<List<Project>> GetAll()
         {
-            return await _context.Projects.Include(proj => proj.SubProjects).ToListAsync();
+            return await _context.Projects.ToListAsync();
         }
 
         public async Task AddSubProject(Project project)

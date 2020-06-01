@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PMS.API.Models.Task;
 using PMS.Domain.TaskAggregate;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Task = PMS.Domain.TaskAggregate.Task;
 
@@ -61,6 +62,17 @@ namespace PMS.API.Controllers
             await _taskRepository.Delete(id);
 
             return Ok();
+        }
+
+        [Route("tasks/getall")]
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var tasks = await _taskRepository.GetAll();
+
+            var reponse = _mapper.Map<IList<Task>, IList<GetAllTaskResponse>>(tasks);
+
+            return Ok(reponse);
         }
     }
 }

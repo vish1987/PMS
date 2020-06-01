@@ -59,5 +59,10 @@ namespace PMS.Infrastructure.Repositories
         {
             return await _context.Tasks.Where(x => projectIds.Contains(x.ProjectId)).ToListAsync();
         }
+
+        public async Task<List<Task>> GetAll()
+        {
+            return await _context.Tasks.Include(task => task.Project).ToListAsync();
+        }
     }
 }

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PMS.API.Models.Project
 {
-    public class AddProejctRequest
+    public class AddProjectRequest
     {
         public string Code { get; set; }
         public string Name { get; set; }
